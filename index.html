@@ -8,6 +8,7 @@
     <script src="js/script.js" defer></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/frappe-charts@1.6.1/dist/frappe-charts.min.umd.js"></script>
 
     
 </head>
@@ -19,9 +20,33 @@
         </div>
 
         <div class="chartDiv"> 
-            <h2>charts</h2>
-            <div id="content">
-                <div class="chart"> </div> 
+            <h2>Charts</h2>
+            
+            <div id="chart"></div> 
+
+            <div>
+                <form> <input id="input-area" type="text" placeholder="Search municipality"> </form>
+        
+                <button id="add-data" type="submit"> submit </button>
+            </div>
+            <div>
+                <button id="line-chart" class="chart-button">Line Chart</button>
+                <button id="bar-chart" class="chart-button">Bar Chart</button>
+                <button id="pie-chart" class="chart-button">Pie Chart</button>
+            </div>
+
+            <div>
+                <input type="radio" id="employment-data" name="dataset" value="employment">
+                <label for="employment-data">Employment</label>
+
+                <input type="radio" id="political-parties-data" name="dataset" value="political-parties">
+                <label for="political-parties-data">Political Parties</label>
+
+                <input type="radio" id="positiveMigration-data" name="dataset" value="employment">
+                <label for="positiveMigration-data">Positive migration</label>
+
+                <input type="radio" id="negativeMigration-data" name="dataset" value="positiveMigration">
+                <label for="negativeMigration-data">Negative migration</label>
             </div>
             
         </div>
