@@ -31,6 +31,8 @@ const requestBody = {
     }
 };
 
+const themeToggleCheckbox = document.getElementById('theme-toggle');
+
 let chart;
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -348,4 +350,43 @@ document.getElementById("download-svg").addEventListener("click", () => {
 
 fetchData();
 buildChart();
+});
+
+//https://www.w3schools.com/howto/howto_js_toggle_dark_mode.asp
+//ended up doind the dark theme with js and not css media
+const body = document.body;
+const mapContainer = document.querySelector('.mapContainer');
+const chartDiv = document.querySelector('.chartDiv');
+const chartTheme = document.getElementById('chart');
+const buttons = document.querySelectorAll('.chart-button, .download-button');
+const modalContent = document.querySelector('.modal-content');
+const closeButtons = document.querySelectorAll('.close');
+const applyTheme = (theme) => {
+    if (theme === 'dark-theme') {
+        body.classList.add('dark-theme');
+        mapContainer.classList.add('dark-theme');
+        chartDiv.classList.add('dark-theme');
+        chartTheme.classList.add('dark-theme');
+        modalContent.classList.add('dark-theme');
+        buttons.forEach(button => button.classList.add('dark-theme'));
+        closeButtons.forEach(closeButton => closeButton.classList.add('dark-theme'));
+        themeToggleCheckbox.checked = true;
+    } 
+    else {
+        body.classList.remove('dark-theme');
+        mapContainer.classList.remove('dark-theme');
+        chartDiv.classList.remove('dark-theme');
+        chartTheme.classList.remove('dark-theme');
+        modalContent.classList.remove('dark-theme');
+        buttons.forEach(button => button.classList.remove('dark-theme'));
+        closeButtons.forEach(closeButton => closeButton.classList.remove('dark-theme'));
+        themeToggleCheckbox.checked = false;
+    }
+    localStorage.setItem('theme', theme);
+};
+
+
+themeToggleCheckbox.addEventListener('change', () => {
+    const newTheme = themeToggleCheckbox.checked ? 'dark-theme' : '';
+    applyTheme(newTheme);
 });
