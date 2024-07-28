@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         
 
         chart = new frappe.Chart("#chart", {
-            title:  isPopulationData ? "Population Data from 2000 to 2021" : "Municipality Data",
+            title:  isPopulationData ? "Population Data of Finland from 2000 to 2021" : "Municipality Data",
             data: data,
             type: type,
             height: 500,
