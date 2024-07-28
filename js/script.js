@@ -30,10 +30,14 @@ const requestBody = {
         "format": "json-stat2"
     }
 };
+
+let chart;
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     let chartType = 'line';
-    let chart;
+    
+    let chartData;
 
     const getData = async ()=> {
         const url = "https://statfin.stat.fi/PxWeb/api/v1/en/StatFin/synt/statfin_synt_pxt_12dy.px"
@@ -53,6 +57,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     };
+
+
+
 
 
 
@@ -84,64 +91,82 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("Chart data: ", chartData);
         console.log("Building chart...");
 
+        createChart(chartData, chartType);
+
         
-        const chart = new frappe.Chart("#chart", {
+        document.getElementById("line-chart").addEventListener("click", function() {
+            chartType = 'line';
+            createChart(chartData, chartType);
+        });
+
+        document.getElementById("bar-chart").addEventListener("click", function() {
+            chartType = 'bar';
+            createChart(chartData, chartType);
+        });
+
+        document.getElementById("pie-chart").addEventListener("click", function() {
+            chartType = 'pie';
+            createChart(chartData, chartType);
+        });
+    };
+
+    function createChart(data, type) {
+        
+           
+        document.querySelector("#chart").innerHTML = '';
+        
+
+        chart = new frappe.Chart("#chart", {
             title: "Population Data from 2000 to 2021",
-            data: chartData,
-            type: chartType,
+            data: data,
+            type: type,
             height: 500,
             colors: ['#eb5146'],
             barOptions: {
-                stacked: 1
+                stacked: type === 'bar' ? 1 : 0
             },
             lineOptions: {
                 hideDots: 1,
                 regionFill: 0
-            }
-
-        })
-        console.log("Chart built successfully");
-
-        document.getElementById("line-chart").addEventListener("click", function() {
-            chartType = 'line';
-            updateChart();
-        });
-    
-        document.getElementById("bar-chart").addEventListener("click", function() {
-            chartType = 'bar';
-            updateChart();
-        });
-    
-        document.getElementById("pie-chart").addEventListener("click", function() {
-            chartType = 'pie';
-            updateChart();
-        });
-
-        function updateChart() {
-            chart = new frappe.Chart(chartElement, {
-                title: chartData === employmentData ? "Employment Data from 2000 to 2021" : "Political Parties Data from 2000 to 2021",
-                data: chartData,
-                type: chartType,
-                height: 500,
-            colors: ['#eb5146'],
-            barOptions: {
-                stacked: 1
             },
-            lineOptions: {
-                hideDots: 1,
-                regionFill: 0
+            axisOptions: {
+                xIsSeries: true
             }
-            });
-        }
+        });
+    }
        
 
 
 
-    }
+    buildChart() 
+    //https://frappe.io/charts/docs/exporting/images
+    //https://frappe.io/charts/docs/update_state/modify_data
 
-    buildChart()
+    
     
 });
+
+function updateChartWithNewData(areaData) {
+    const labels = ["Positive Migration", "Negative Migration", "Employment"];
+            const values = [areaData.positiveMigration, areaData.negativeMigration, areaData.employmentData];
+
+            const newChartData = {
+                labels: labels,
+                datasets: [
+                    {
+                        name: "Statistics",
+                        values: values
+                    }
+                ]
+            };
+
+            if (chart) {
+                chart.update(newChartData);
+            }
+}
+
+
+
 
 
 
@@ -258,6 +283,12 @@ const getFeature =(feature, layer) =>   {
             layer.bindPopup(
                 `<strong>${name}</strong><br>Positive Migration: ${positiveMigration}<br>Negative Migration: ${negativeMigration}<br>Employment: ${employmentData}`
             ).openPopup(e.latlng);
+
+            updateChartWithNewData({
+                positiveMigration,
+                negativeMigration,
+                employmentData
+            });
         }
     });
     
