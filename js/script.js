@@ -38,6 +38,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     let chartType = 'line';
     
     let chartData;
+    let isPopulationData = true;
+
+    //https://www.w3schools.com/howto/howto_css_modals.asp
+    //https://stackoverflow.com/questions/10636667/bootstrap-modal-appearing-under-background
+
+    const modal = document.getElementById("manualModal");
+    const span = document.getElementsByClassName("close")[0];
+
+    modal.style.display = "block";
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
 
     const getData = async ()=> {
         const url = "https://statfin.stat.fi/PxWeb/api/v1/en/StatFin/synt/statfin_synt_pxt_12dy.px"
@@ -108,6 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             chartType = 'pie';
             createChart(chartData, chartType);
         });
+        
     };
 
     function createChart(data, type) {
@@ -117,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         
 
         chart = new frappe.Chart("#chart", {
-            title: "Population Data from 2000 to 2021",
+            title:  isPopulationData ? "Population Data from 2000 to 2021" : "Municipality Data",
             data: data,
             type: type,
             height: 500,
@@ -134,16 +154,38 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     }
+    document.getElementById("population-data").addEventListener("change", function() {
+        if (this.checked) {
+            isPopulationData = true;
+            document.getElementById("line-chart").style.display = 'inline-block';
+            document.getElementById("pie-chart").style.display = 'none';
+            chartType = 'line';
+            buildChart();
+        }
        
 
 
 
-    buildChart() 
+    
     //https://frappe.io/charts/docs/exporting/images
     //https://frappe.io/charts/docs/update_state/modify_data
 
     
     
+});
+
+document.getElementById("area-data").addEventListener("change", function() {
+    if (this.checked) {
+        isPopulationData = false;
+        document.getElementById("line-chart").style.display = 'none';
+        document.getElementById("pie-chart").style.display = 'inline-block';
+            chartType = 'bar';
+        updateChartWithNewData({
+            positiveMigration: feature.properties.positiveMigration,
+            negativeMigration: feature.properties.negativeMigration,
+            employmentData: feature.properties.employment
+        });
+    }
 });
 
 function updateChartWithNewData(areaData) {
@@ -163,7 +205,10 @@ function updateChartWithNewData(areaData) {
             if (chart) {
                 chart.update(newChartData);
             }
+            
 }
+
+
 
 
 
@@ -284,14 +329,23 @@ const getFeature =(feature, layer) =>   {
                 `<strong>${name}</strong><br>Positive Migration: ${positiveMigration}<br>Negative Migration: ${negativeMigration}<br>Employment: ${employmentData}`
             ).openPopup(e.latlng);
 
-            updateChartWithNewData({
-                positiveMigration,
-                negativeMigration,
-                employmentData
-            });
+            if (!isPopulationData) {
+                updateChartWithNewData({
+                    positiveMigration,
+                    negativeMigration,
+                    employmentData
+                });
+            }
         }
     });
-    
-}
+};
+
+document.getElementById("download-svg").addEventListener("click", () => {
+    if (chart) {
+        chart.export();
+    }
+});
 
 fetchData();
+buildChart();
+});

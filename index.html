@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Static portal</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js" defer></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -32,19 +32,36 @@
             </div>
 
             <div>
-                <input type="radio" id="employment-data" name="dataset" value="employment">
-                <label for="employment-data">Employment</label>
+                <input type="radio" id="area-data" name="dataset" value="areaData">
+                <label for="area-data">Municipality</label>
 
                 <input type="radio" id="population-data" name="dataset" value="poopulation">
                 <label for="population-data">Population</label>
+            </div>
 
-                <input type="radio" id="positiveMigration-data" name="dataset" value="employment">
-                <label for="positiveMigration-data">Positive migration</label>
-
-                <input type="radio" id="negativeMigration-data" name="dataset" value="positiveMigration">
-                <label for="negativeMigration-data">Negative migration</label>
+            <div>
+                <button id="download-svg" class="download-button">Export SVG</button>
             </div>
             
+        </div>
+    </div>
+
+
+    <div id="manualModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Manual</h2>
+            <p>Welcome to the data visualization page. Here's how you can use the page:</p>
+            <ul>
+                <li><strong>Map:</strong> Hover over the municipalities to see their names. Click on a municipality to update the chart with its data when municapality mode is selected.</li>
+                <li><strong>Charts:</strong> Use the buttons below the chart to switch between line, bar, and pie charts(not all options are avaiable to every data type).</li>
+                <li><strong>Data Selection:</strong> Use the radio buttons to switch between population data and municipality data.</li>
+                <li><strong>Use order:</strong> select data mode and then chart type, note that changing chart type on municapilty mode resets data, you need to again select municipality</li>
+                <li><strong>Exporting:</strong> By pressing the export button you can export the selected chart in SVG.</li>    
+             </ul>
+             
+
+            <p>Enjoy exploring the data!</p>
         </div>
     </div>
 </body>
